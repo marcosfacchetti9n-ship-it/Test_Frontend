@@ -8,6 +8,7 @@ Aplicación web simple que permite crear, listar, editar y eliminar usuarios.
 - CSS
 - JavaScript (Vanilla)
 - API REST (Java backend)
+- Base de datos (PostgreSQL)
 
 ## Funcionalidades
 
@@ -31,4 +32,4 @@ https://test-1-rtka.onrender.com/usuarios
 
 ## Autor
 
-- Tu nombre
+- Marcos Facchetti
