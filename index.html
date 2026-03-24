@@ -1,179 +1,26 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Usuarios</title>
+  <meta charset="UTF-8">
+  <title>Usuarios</title>
 
-    <style>
-        body {
-          font-family: Arial, sans-serif;
-          background: #f4f6f8;
-          margin: 0;
-          padding: 20px;
-          display: flex;
-          justify-content: center;
-        }
-
-        .container {
-          background: white;
-          padding: 20px;
-          border-radius: 10px;
-          width: 400px;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-          text-align: center;
-          margin-bottom: 20px;
-        }
-
-        .form {
-          display: flex;
-          gap: 10px;
-          margin-bottom: 20px;
-        }
-
-        input {
-          flex: 1;
-          padding: 8px;
-          border-radius: 6px;
-          border: 1px solid #ccc;
-        }
-
-        button {
-          padding: 8px 12px;
-          border: none;
-          border-radius: 6px;
-          cursor: pointer;
-        }
-
-        .btn-crear {
-          background: #2ecc71;
-          color: white;
-        }
-
-        .btn-delete {
-          background: #e74c3c;
-          color: white;
-          margin-left: 5px;
-        }
-
-        .btn-edit {
-          background: #3498db;
-          color: white;
-          margin-left: 5px;
-        }
-
-        ul {
-          list-style: none;
-          padding: 0;
-        }
-
-        li {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 8px;
-          border-bottom: 1px solid #eee;
-        }
-
-        .acciones {
-          display: flex;
-        }
-    </style>
+  <!-- CSS externo -->
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-<div class="container">
+  <div class="container">
     <h1>Usuarios</h1>
 
     <div class="form">
-        <input type="text" id="nombre" placeholder="Ingrese un nombre">
-        <button class="btn-crear" onclick="crearUsuario()">Crear</button>
+      <input type="text" id="nombre" placeholder="Ingrese un nombre">
+      <button id="btnCrear" class="btn-crear">Crear</button>
     </div>
 
     <ul id="lista"></ul>
-</div>
+  </div>
 
-<script>
-    const URL = "https://test-1-rtka.onrender.com/usuarios";
-
-    async function cargarUsuarios() {
-      try {
-        const res = await fetch(URL);
-        const data = await res.json();
-
-        const lista = document.getElementById("lista");
-        lista.innerHTML = "";
-
-        data.forEach(u => {
-          const li = document.createElement("li");
-
-          const span = document.createElement("span");
-          span.textContent = u.nombre;
-
-          const acciones = document.createElement("div");
-          acciones.className = "acciones";
-
-          const btnDelete = document.createElement("button");
-          btnDelete.textContent = "Eliminar";
-          btnDelete.className = "btn-delete";
-          btnDelete.onclick = () => eliminarUsuario(u.id);
-
-          const btnEditar = document.createElement("button");
-          btnEditar.textContent = "Editar";
-          btnEditar.className = "btn-edit";
-          btnEditar.onclick = () => editarUsuario(u.id, u.nombre);
-
-          acciones.appendChild(btnEditar);
-          acciones.appendChild(btnDelete);
-
-          li.appendChild(span);
-          li.appendChild(acciones);
-
-          lista.appendChild(li);
-        });
-
-      } catch (error) {
-        console.error("Error al cargar usuarios:", error);
-      }
-    }
-
-    async function crearUsuario() {
-      const input = document.getElementById("nombre");
-      const nombre = input.value.trim();
-
-      if (!nombre) return;
-
-      await fetch(URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nombre })
-      });
-
-      input.value = "";
-      cargarUsuarios();
-    }
-
-    async function eliminarUsuario(id) {
-      await fetch(`${URL}/${id}`, { method: "DELETE" });
-      cargarUsuarios();
-    }
-
-    async function editarUsuario(id, nombreActual) {
-      const nuevoNombre = prompt("Nuevo nombre:", nombreActual);
-      if (!nuevoNombre) return;
-
-      await fetch(`${URL}/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nombre: nuevoNombre })
-      });
-
-      cargarUsuarios();
-    }
-
-    cargarUsuarios();
-</script>
+  <!-- JS externo -->
+  <script src="app.js"></script>
 </body>
 </html>
