@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Usuarios</h1>
+
+<ul id="lista"></ul>
+
+<input type="text" id="nombre" placeholder="Nombre">
+<button onclick="crearUsuario()">Crear</button>
+
+<script>
+    const URL = "https://test-1-rtka.onrender.com/usuarios";
+
+    // GET
+    function cargarUsuarios() {
+      fetch(URL)
+        .then(res => res.json())
+        .then(data => {
+          const lista = document.getElementById("lista");
+          lista.innerHTML = "";
+
+          data.forEach(u => {
+            const li = document.createElement("li");
+
+            // nombre
+            const span = document.createElement("span");
+            span.textContent = u.nombre;
+
+            // botón eliminar
+            const btnDelete = document.createElement("button");
+            btnDelete.textContent = "Eliminar";
+            btnDelete.onclick = () => eliminarUsuario(u.id);
+
+            // botón editar
+            const btnEditar = document.createElement("button");
+            btnEditar.textContent = "Editar";
+            btnEditar.onclick = () => editarUsuario(u.id, u.nombre);
+
+            li.appendChild(span);
+            li.appendChild(btnDelete);
+            li.appendChild(btnEditar);
+
+            lista.appendChild(li);
+          });
+        });
+    }
+
+    // POST
+    function crearUsuario() {
+      const nombre = document.getElementById("nombre").value;
+
+      fetch(URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ nombre })
+      }).then(() => {
+        cargarUsuarios();
+      });
+    }
+
+    // DELETE
+    function eliminarUsuario(id) {
+      fetch(URL + "/" + id, {
+        method: "DELETE"
+      }).then(() => {
+        cargarUsuarios();
+      });
+    }
+
+    // PUT (update)
+    function editarUsuario(id, nombreActual) {
+      const nuevoNombre = prompt("Nuevo nombre:", nombreActual);
+
+      if (!nuevoNombre) return;
+
+      fetch(URL + "/" + id, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ nombre: nuevoNombre })
+      }).then(() => {
+        cargarUsuarios();
+      });
+    }
+
+    cargarUsuarios();
+</script>
+
+</body>
+</html>
